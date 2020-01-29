@@ -2,6 +2,8 @@
 
 A REST API service that showcases how [Quarkus](https://quarkus.io/) can easily turn an OpenAPI (build with [Apicurito](https://github.com/Apicurio)) specification into a service. This project also shows other benefits we get from Quarkus like hot deploys, active-record like MongoDB access, service health checks, and easy containerization/deployment on OpenShift.
 
+![Screenshot](.screens/terminalshot.png)
+
 ## Running this
 There are several ways to run this. If you don't understand the differences, just go with option 1. I've included the others here for other deployment and testing scenarios that might be needed.
 
