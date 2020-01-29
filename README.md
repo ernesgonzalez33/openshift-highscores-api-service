@@ -1,6 +1,8 @@
 # High Scores API Service
 
-A REST API service that showcases how [Quarkus](https://quarkus.io/) can easily turn an OpenAPI (build with [Apicurito](https://github.com/Apicurio)) specification into a service. This project also shows other benefits we get from Quarkus like hot deploys, active-record like MongoDB access, service health checks, and easy containerization/deployment on OpenShift.
+An API service that showcases how [Quarkus](https://quarkus.io/) can make it easy to expose REST endpoints and tie them to MongoDB. This project also shows other benefits we get from Quarkus like hot deploys, active-record like ORM access, service health checks, and easy containerization/deployment on OpenShift.
+
+I initially started designing this API with [Apicurito](https://github.com/Apicurio)) and exported that as an OpenAPI specification. Then after I coded my app, I now let Quarkus auto-create that specification and swagger-webpage for me on the fly.
 
 ![Screenshot](.screens/terminalshot.png)
 
