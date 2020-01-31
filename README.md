@@ -26,10 +26,10 @@ The application is now runnable using `java -jar target/highscores-api-service-1
 > *(this requires [using GraalVM](https://quarkus.io/guides/building-native-image#configuring-graalvm))*
 
 You can create a native executable using: 
->`./mvnw package -Pnative`.
+>`./mvnw package -Pnative`
 
 Or you can use Docker to build the native executable using:
->`./mvnw package -Pnative -Dquarkus.native.container-build=true`.
+>`./mvnw package -Pnative -Dquarkus.native.container-build=true`
 
 You can then execute your binary locally:
 >`./target/highscores-api-service-1.0.0-SNAPSHOT-runner`
@@ -59,8 +59,12 @@ Expose access to outside of cluster
 >`curl $HS_URL && echo`
 
 ### Deploying Option 2 - Deploying from GitHub source to OpenShift
-Build things:
->`oc new-app quay.io/quarkus/ubi-quarkus-native-s2i:19.3.1-java11~https://github.com/dudash/openshift-highscores-api-service.git --name=highscores-api-service`
+*(you will need to specify config for the app to talk to mongodb, you can do that with application.properties or with env vars)*
+
+Build things (I gave it 6GB RAM but you might be able to get away with 4GB):
+>`oc new-app quay.io/quarkus/ubi-quarkus-native-s2i:19.3.1-java8~https://github.com/dudash/openshift-highscores-api-service.git --name=highscores-api-service`
+>`oc patch bc/highscores-api-service -p '{"spec":{"resources":{"limits":{"cpu":"2", "memory":"6Gi"}}}}'`
+>`oc start-build highscores-api-service`
 >`oc logs -f bc/highscores-api-service`
 
 Expose access to outside of cluster
