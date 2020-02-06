@@ -40,4 +40,12 @@ public class Score extends PanacheMongoEntity {
     public static List<Score> listAllDescending(){
         return listAll(Sort.descending("score"));
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+            "\"name\":\"" + name + "\"," +
+            "\"score\":" + score + 
+            "}";
+    }
 }

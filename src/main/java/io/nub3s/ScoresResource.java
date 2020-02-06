@@ -1,5 +1,9 @@
 package io.nub3s;
 
+import io.vertx.axle.core.eventbus.EventBus;
+import io.vertx.axle.core.eventbus.Message;
+
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -10,6 +14,9 @@ import java.util.List;
 
 @Path("/scores")
 public class ScoresResource {
+
+    @Inject EventBus bus;
+
     @GET
     @Produces("application/json")
     public List<Score> list(){
@@ -20,6 +27,8 @@ public class ScoresResource {
     @Consumes("application/json")
     public Response create(Score score) {
         score.persist();
+        bus.publish("newscore", score.toString()); // tell NotifcationsWebSocket to broadcast an update
+        bus.publish("topten", topTenList().toString()); // tell NotifcationsWebSocket to broadcast an update
         return Response.status(201).build();
     }
 
