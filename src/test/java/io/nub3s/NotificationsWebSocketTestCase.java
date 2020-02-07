@@ -22,7 +22,7 @@ public class NotificationsWebSocketTestCase {
     public void testWebsocket() throws Exception {
         try (Session session = ContainerProvider.getWebSocketContainer().connectToServer(Client.class, uri)) {
             Assertions.assertEquals("TEST CLIENT IS CONNECTED", MESSAGES.poll(10, TimeUnit.SECONDS));
-            Assertions.assertEquals("_socket_debug:Client 123456 joined", MESSAGES.poll(10, TimeUnit.SECONDS));
+            Assertions.assertEquals("_socket_debug:Client c_123456 joined", MESSAGES.poll(10, TimeUnit.SECONDS));
             session.getAsyncRemote().sendText("hello from test client");
             Assertions.assertEquals("c_123456:hello from test client", MESSAGES.poll(10, TimeUnit.SECONDS));
         }
