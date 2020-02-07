@@ -8,7 +8,7 @@ import io.quarkus.panache.common.Sort;
 
 import java.util.List;
 
-import javax.json.bind.annotation.JsonbProperty;
+// import javax.json.bind.annotation.JsonbProperty;
 
 @MongoEntity(collection="scores")
 public class Score extends PanacheMongoEntity {
