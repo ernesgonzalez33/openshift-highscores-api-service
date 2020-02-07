@@ -81,7 +81,7 @@ For more info on this way of deploying (and alternatives) [see the docs here](ht
 This service won't function until it can store its data into a MongoDB. We can easily deploy one on OpenShift and have OpenShift provide service discovery. And then we configure this app's deployment with the user/password details for connecting to the DB.
 > `oc new-app -e MONGODB_USER=thisisauser -e MONGODB_PASSWORD=thisis4password -e MONGODB_DATABASE=highscores -e MONGODB_ADMIN_PASSWORD=thisis4password mongodb:latest`
 >
-> `oc set env dc/highscores-api-service QUARKUS_MONGODB_CONNECTION_STRING=mongodb://thisisauser:thisis4password@mongodb:27017`
+> `oc set env dc/highscores-api-service QUARKUS_MONGODB_CONNECTION_STRING=mongodb://thisisauser:thisis4password@mongodb:27017/highscores`
 
 
 ## Hooking in 3scale API Management
