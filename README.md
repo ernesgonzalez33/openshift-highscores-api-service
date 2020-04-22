@@ -90,5 +90,15 @@ This service won't function until it can store its data into a MongoDB. We can e
 ## Hooking in 3scale API Management
 TBD - [3scale ref here](https://access.redhat.com/documentation/en-us/red_hat_3scale_api_management/2.7/html/providing_apis_in_the_developer_portal/create-new-service-openapi-specification#using_openapi_specification)
 
+
+## Testing POSTS with HTTPie
+I like to use a nice CLI tool called HTTPie. If you have it below are some useful commands.
+
+### Testing POST with basic auth turned on
+```
+http -a jason:password POST http://localhost:5000/scores  score=1000 name=JAS
+```
+
+
 ## Thanks and Credit
 This service was built based on guidance from the [Quarkus example here](https://quarkus.io/guides/openapi-swaggerui#loading-openapi-schema-from-static-files).
