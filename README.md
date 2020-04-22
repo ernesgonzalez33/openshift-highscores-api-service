@@ -80,6 +80,10 @@ Expose access to outside of cluster
 For more info on this way of deploying (and alternatives) [see the docs here](https://quarkus.io/guides/deploying-to-openshift-s2i).
 
 ## Other Things
+## The POST route for scores now has basic auth enabled on it
+* So you will need to pass username/password in to POST scores
+* You can disable it with an environment vairable (see the application.properties file)
+
 ## Running a MongoDB in OpenShift
 This service won't function until it can store its data into a MongoDB. We can easily deploy one on OpenShift and have OpenShift provide service discovery. And then we configure this app's deployment with the user/password details for connecting to the DB.
 > `oc new-app -e MONGODB_USER=thisisauser -e MONGODB_PASSWORD=thisis4password -e MONGODB_DATABASE=highscores -e MONGODB_ADMIN_PASSWORD=thisis4password mongodb:latest`
@@ -89,6 +93,16 @@ This service won't function until it can store its data into a MongoDB. We can e
 
 ## Hooking in 3scale API Management
 TBD - [3scale ref here](https://access.redhat.com/documentation/en-us/red_hat_3scale_api_management/2.7/html/providing_apis_in_the_developer_portal/create-new-service-openapi-specification#using_openapi_specification)
+
+
+## Testing POSTS with HTTPie
+I like to use a nice CLI tool called HTTPie. If you have it below are some useful commands.
+
+### Testing POST with basic auth turned on
+```
+http -a dudash:123456 POST http://localhost:5000/scores  score=1000 name=JAS
+```
+
 
 ## Thanks and Credit
 This service was built based on guidance from the [Quarkus example here](https://quarkus.io/guides/openapi-swaggerui#loading-openapi-schema-from-static-files).
