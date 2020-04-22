@@ -45,8 +45,6 @@ public class ScoresResource {
             byte[] bytes = Base64.getDecoder().decode(base64string);
             String credentials = new String(bytes, StandardCharsets.UTF_8);
             final String[] keyValueCredentials = credentials.split(":", 2);
-            System.out.println("GOT USER=" + keyValueCredentials[0].compareTo(quickAuthUser));
-            System.out.println("GOT PASSWORD=" + keyValueCredentials[1].compareTo(quickAuthPassword));
             if (keyValueCredentials[0].compareTo(quickAuthUser)!=0) return Response.status(401).build();
             if (keyValueCredentials[1].compareTo(quickAuthPassword)!=0) return Response.status(401).build();
         }
