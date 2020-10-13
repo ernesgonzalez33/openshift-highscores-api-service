@@ -14,6 +14,7 @@ import java.util.List;
 public class Score extends PanacheMongoEntity {
     public String name;
     public Integer score;
+    public String checksum;
 
     public String getName(){
         return name;
