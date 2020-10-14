@@ -33,7 +33,7 @@ Run the api service in dev mode that enables live coding using:
     >`oc start-build highscores-api-service --from-dir=. --follow`
 
 2) Create OpenShift/Kubernetes resources:
-    >`oc new-app --image-stream=highscores-api-service:latest`
+    >`oc new-app --image-stream=highscores-api-service:latest -e CHECKSUM_SECRET=somethingsecret -e QUICKAUTH_USER=changeme -e QUICKAUTH_PASSWORD=changeme`
 
 3) Expose access to outside of cluster
     >`oc expose service highscores-api-service`
@@ -53,19 +53,21 @@ There are several env variables you can (and should) use to configure this at ru
 * QUICKAUTH_ENFORCING, to turn on/off basic auth on the POST
 * CHECKSUM_ENFORCING, to turn on/off the checksum on the POST
 * QUARKUS_MONGODB_CONNECTION_STRING, the details of where and how to connect to the database
-* more...
+* QUICKAUTH_USER, user for basic auth
+* QUICKAUTH_PASSWORD, pass for basic auth
+* CHECKSUM_SECRET, secret using in validating our POST data
 
 ## Testing
 I like to use a nice CLI tool called HTTPie. If you have it below are some useful commands.
 
 ### Testing POST with basic auth turned on
 ```
-http -a dudash:123456 POST http://localhost:5000/scores  score=1000 name=JAS
+http -a dudash:123456 POST http://localhost:5000/scores score=1000 name=JAS
 ```
 
 ### Testing POST with basic auth and checksums turned on
 ```
-http -a dudash:123456 POST http://localhost:5000/scores  score=1000 name=JAS checksum=d1791337d1e50340bc9b78d2b0d34c2740158d1e
+http -a dudash:123456 POST http://localhost:5000/scores score=1000 name=JAS checksum=d1791337d1e50340bc9b78d2b0d34c2740158d1e
 ```
 
 ## Other Notes
@@ -82,7 +84,7 @@ http -a dudash:123456 POST http://localhost:5000/scores  score=1000 name=JAS che
 *(note: you will need to specify config for the app to talk to mongodb, you can do that with application.properties or with env vars)*
 
 1) [Build things](https://quarkus.io/guides/deploying-to-openshift-s2i) (it needs a lot of memory):
-    >`oc new-app quay.io/quarkus/ubi-quarkus-native-s2i:19.3.1-java8~https://github.com/CodeCafeOpenShiftGame/openshift-highscores-api-service.git --name=highscores-api-service`
+    >`oc new-app quay.io/quarkus/ubi-quarkus-native-s2i:19.3.1-java8~https://github.com/CodeCafeOpenShiftGame/openshift-highscores-api-service.git --name=highscores-api-service -e CHECKSUM_SECRET=somethingsecret -e QUICKAUTH_USER=changeme -e QUICKAUTH_PASSWORD=changeme`
     >
     >`oc patch bc/highscores-api-service -p '{"spec":{"resources":{"limits":{"cpu":"4", "memory":"6Gi"}}}}'`
     >
