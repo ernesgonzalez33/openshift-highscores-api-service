@@ -8,12 +8,16 @@ import io.quarkus.panache.common.Sort;
 
 import java.util.List;
 
+import org.bson.codecs.pojo.annotations.BsonIgnore;
+
 // import javax.json.bind.annotation.JsonbProperty;
 
 @MongoEntity(collection="scores")
 public class Score extends PanacheMongoEntity {
     public String name;
     public Integer score;
+    
+    @BsonIgnore
     public String checksum;
 
     public String getName(){
@@ -21,7 +25,8 @@ public class Score extends PanacheMongoEntity {
     }
 
     public void setName(String name){
-        this.name = name.toUpperCase(); // store all names in uppercase in the DB
+        // this.name = name.toUpperCase(); // we used to store all names in uppercase in the DB (removed 2020-10-19)
+        this.name = name;
     }
 
     public Integer getScore(){

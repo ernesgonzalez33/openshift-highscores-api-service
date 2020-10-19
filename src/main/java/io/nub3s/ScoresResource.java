@@ -57,10 +57,10 @@ public class ScoresResource {
             if (keyValueCredentials[1].compareTo(quickAuthPassword)!=0) return Response.status(401).build();
         }
         else {
-            System.out.println("POST to /score: ignoring auth");
+            System.out.println("POST to /score: ignoring basic auth");
         }
         if (checksumEnforcing) {
-            System.out.println("POST to /score: checksum="+score.checksum);
+            // System.out.println("POST to /score: checksum="+score.checksum);
             if (score.checksum == null || score.checksum.length()<=0) return Response.status(401).build();
             if (!validateChecksum(score.name, score.score.toString(), score.checksum)) return Response.status(401).build();
         }
@@ -88,7 +88,8 @@ public class ScoresResource {
     }
 
     private boolean validateChecksum(String userName, String userScore, String checksum) {
-        //System.out.println("validating checksum using secret:" + checksumSecret);
+        // System.out.println("user / score: " + userName + " / " + userScore);
+        // System.out.println("validating checksum using secret:" + checksumSecret);
         String mashup = userName + userScore + checksumSecret;
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-1");
