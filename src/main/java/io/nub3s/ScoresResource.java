@@ -17,6 +17,10 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import java.util.List;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 @Path("/scores")
 public class ScoresResource {
 
@@ -26,6 +30,10 @@ public class ScoresResource {
     protected String quickAuthUser;
     @ConfigProperty(name = "quickauthpassword", defaultValue = "true")
     protected String quickAuthPassword;
+    @ConfigProperty(name = "checksumenforcing", defaultValue = "true")
+    protected boolean checksumEnforcing;
+    @ConfigProperty(name = "checksumsecret", defaultValue = "123456")
+    protected String checksumSecret;
 
     @Inject EventBus bus;
 
@@ -49,7 +57,15 @@ public class ScoresResource {
             if (keyValueCredentials[1].compareTo(quickAuthPassword)!=0) return Response.status(401).build();
         }
         else {
-            System.out.println("ignoring auth");
+            System.out.println("POST to /score: ignoring basic auth");
+        }
+        if (checksumEnforcing) {
+            // System.out.println("POST to /score: checksum="+score.checksum);
+            if (score.checksum == null || score.checksum.length()<=0) return Response.status(401).build();
+            if (!validateChecksum(score.name, score.score.toString(), score.checksum)) return Response.status(401).build();
+        }
+        else {
+            System.out.println("POST to /score: ignoring checksums");
         }
         score.persist();
         bus.publish("newscore", score.toString()); // tell NotifcationsWebSocket to broadcast an update
@@ -71,4 +87,22 @@ public class ScoresResource {
         return Score.findTopTen();
     }
 
+    private boolean validateChecksum(String userName, String userScore, String checksum) {
+        // System.out.println("user / score: " + userName + " / " + userScore);
+        // System.out.println("validating checksum using secret:" + checksumSecret);
+        String mashup = userName + userScore + checksumSecret;
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-1");
+            byte[] digest = md.digest(mashup.getBytes(StandardCharsets.UTF_8));
+            StringBuilder sb = new StringBuilder(40);
+            for (int i = 0; i < digest.length; ++i) {
+                sb.append(Integer.toHexString((digest[i] & 0xFF) | 0x100).substring(1, 3));
+            }
+            System.out.println("calculated checksum to be: " + sb.toString());
+            System.out.println("     provided checksum is: " + checksum);
+            return (sb.toString().equals(checksum));
+        } catch (NoSuchAlgorithmException e) {
+            throw new IllegalStateException(e);
+        }
+    }
 }
