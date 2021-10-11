@@ -84,7 +84,7 @@ http -a dudash:123456 POST http://localhost:5000/scores score=1000 name=JAS chec
 *(note: you will need to specify config for the app to talk to mongodb, you can do that with application.properties or with env vars)*
 
 1) [Build things](https://quarkus.io/guides/deploying-to-openshift-s2i) (it needs a lot of memory):
-    >`oc new-app quay.io/quarkus/ubi-quarkus-native-s2i:19.3.1-java8~https://github.com/CodeCafeOpenShiftGame/openshift-highscores-api-service.git --name=highscores-api-service -e CHECKSUM_SECRET=somethingsecret -e QUICKAUTH_USER=changeme -e QUICKAUTH_PASSWORD=changeme`
+    >`oc new-app quay.io/quarkus/ubi-quarkus-native-s2i:19.3-java8~https://github.com/CodeCafeOpenShiftGame/openshift-highscores-api-service.git --name=highscores-api-service -e CHECKSUM_SECRET=somethingsecret -e QUICKAUTH_USER=changeme -e QUICKAUTH_PASSWORD=changeme`
     >
     >`oc patch bc/highscores-api-service -p '{"spec":{"resources":{"limits":{"cpu":"4", "memory":"6Gi"}}}}'`
     >
@@ -102,7 +102,7 @@ http -a dudash:123456 POST http://localhost:5000/scores score=1000 name=JAS chec
 3) This service won't function until it can store its data into a MongoDB. We can easily deploy one on OpenShift and have OpenShift provide service discovery. And then we configure this app's deployment with the user/password details for connecting to the DB.
     > `oc new-app -e MONGODB_USER=thisisauser -e MONGODB_PASSWORD=thisis4password -e MONGODB_DATABASE=highscores -e MONGODB_ADMIN_PASSWORD=thisis4password mongodb:latest`
     >
-    > `oc set env dc/highscores-api-service QUARKUS_MONGODB_CONNECTION_STRING=mongodb://thisisauser:thisis4password@mongodb:27017/highscores`
+    > `oc set env deployment/highscores-api-service QUARKUS_MONGODB_CONNECTION_STRING=mongodb://thisisauser:thisis4password@mongodb:27017/highscores`
 
 
 
